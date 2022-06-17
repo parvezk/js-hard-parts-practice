@@ -81,6 +81,14 @@ var intersection = (...arrays) => {
   }, arrays[0]);
 };
 
+const intersection = (...arrays) => {
+  return arrays.slice(1).reduce((accum, array) => {
+    return accum.filter(
+      (num) => array.includes(num) || array.indexOf(num) > -1
+    );
+  }, arrays[0]);
+};
+
 var intersection = (...arrays) => {
   return arrays.slice(1).reduce((acc, array, index) => {
     const accum = [];
@@ -108,10 +116,33 @@ var intersection = (...arrays) => {
 };
 // console.log(intersection([5, 10, 15, 20], [15, 88, 1, 5, 7], [1, 10, 15, 5, 20]));
 // should log: [5, 15]
+// console.log(intersection([1, 5, 10, 4, 20], [5, 6, 1, 4, 7], [1, 4, 15, 5, 60]));
+// should log: [1, 4, 5]
 
 // Challenge 8
-var union = (...arrays) => {
-  return arrays.reduce((acc, arr) => [...new Set([...acc, ...arr]).values()]);
+var union = (...arrs) =>
+  arrs.reduce((acc, arr) => [...new Set([...acc, ...arr]).values()], []);
+
+const union2 = (...arrays) =>
+  arrays
+    .slice(1)
+    .reduce(
+      (accum, array) =>
+        array.reduce(
+          (acc, num) => (!acc.includes(num) ? [...acc, num] : acc),
+          accum
+        ),
+      arrays[0]
+    );
+
+const union = (...arrays) => {
+  return arrays.slice(1).reduce((array, accum) => {
+    return array.reduce((acc, num) => {
+      if (!acc.includes(num) || acc.indexOf(num) < 0) acc.push(num);
+
+      return acc;
+    }, accum);
+  }, arrays[0]);
 };
 
 var union = (...arrays) => {
@@ -136,15 +167,15 @@ var union = (...arrays) => {
 
 // Challenge 9
 const objOfMatches = (array1, array2, callback) => {
-  const object = {};
+  const obj = {};
 
-  array1.forEach((val, idx) => {
-    if (callback(array1[idx]) === array2[idx]) {
-      object[array1[idx]] = array2[idx];
+  array1.forEach((key, index) => {
+    if (callback(key) === array2[index]) {
+      obj[key] = array2[index];
     }
   });
 
-  return object;
+  return obj;
 };
 
 // console.log(objOfMatches(['hi', 'howdy', 'bye', 'later', 'hello'], ['HI', 'Howdy', 'BYE', 'LATER', 'hello'], (str) => str.toUpperCase()));
