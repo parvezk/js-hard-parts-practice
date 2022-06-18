@@ -77,6 +77,18 @@ function theEnd() {
 /* CHALLENGE 7 */
 
 function delayCounter(target, wait) {
+  let i = 1;
+  let interval = null;
+
+  return () => {
+    interval = setInterval(() => {
+      console.log(i);
+      if (i++ === target) clearInterval(interval);
+    }, wait);
+  };
+}
+
+function delayCounter(target, wait) {
   let num = 1,
     interval = null;
   return () => {
@@ -146,6 +158,26 @@ class SecondClock {
 // }, 6000);
 
 /* CHALLENGE 10 */
+
+function debounce(callback, interval) {
+  // ADD CODE HERE
+  let timer = null;
+  let done = true;
+
+  return () => {
+    clearTimeout(timer);
+
+    timer = setTimeout(() => {
+      done = true;
+    }, interval);
+
+    if (done) {
+      done = false;
+
+      return callback();
+    } else return undefined;
+  };
+}
 
 function debounce(callback, interval) {
   // ADD CODE HERE
