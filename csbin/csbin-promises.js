@@ -9,45 +9,48 @@ function sayHello() {
 // Uncomment the line below when ready
 // sayHello(); // should log "Hello" after 1000ms
 
-/*// Challenge 2
+// Challenge 2
 var promise = new Promise(function (resolve, reject) {
   // ADD CODE HERE
   setTimeout(() => {
-    resolve('Resolved!');
+    resolve("Resolved!");
   }, 1000);
 });
 
 // Should print out "Resolved!"
 // ADD CODE HERE
-promise.then((value) => {
-  console.log(value)
-}).catch(error => console.log(error));*/
+promise
+  .then((value) => {
+    console.log(value);
+  })
+  .catch((error) => console.log(error));
 
-/*// Challenge 3
-promise = new Promise(function(resolve, reject) {
+// Challenge 3
+promise = new Promise(function (resolve, reject) {
   // ADD CODE HERE
-  reject('Rejected!');
+  reject("Rejected!");
 });
 
 // Should print out "Reject!"
 // ADD CODE HERE
-promise.catch(error => {
+promise.catch((error) => {
   console.log(error);
-});*/
+});
 
-/*// Challenge 4
+// Challenge 4
 promise = new Promise(function (resolve, reject) {
   // ADD CODE HERE
-  resolve('Promise has been resolved!')
+  resolve("Promise has been resolved!");
 });
 
 // Uncomment the lines below when ready
 promise.then((value) => console.log(value));
-console.log("I'm not the promise!");*/
+console.log("I'm not the promise!");
 
 // Challenge 5
 function delay() {
   return new Promise((resolve, reject) => {
+    // setTimeout(resolve, 1000);
     setTimeout(() => {
       resolve();
     }, 1000);
@@ -93,6 +96,14 @@ const fakeAPICall = (i) => {
     }
   });
 };
+
+function getAllData() {
+  // CODE GOES HERE
+  const promises = [fakeAPICall(0), fakeAPICall(1), fakeAPICall(2)];
+  Promise.all(promises).then((values) => {
+    console.log(values);
+  });
+}
 
 function getAllData() {
   // CODE GOES HERE

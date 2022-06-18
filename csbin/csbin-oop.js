@@ -240,6 +240,7 @@ const robotMixin = {
 let robotFido = new Dog();
 
 // robotFido = /* Put code here to give Fido robot skills */;
+//Object.assign(robotFido, robotMixin);
 Object.assign(Dog.prototype, robotMixin);
 
 // /********* Uncomment to test your work! *********/
