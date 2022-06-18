@@ -165,6 +165,8 @@ function userFactory(name, score) {
 const adminFunctionStore = {
   // add code here
 };
+// adminFunctionStore.prototype = userFactory();
+// adminFunctionStore.prototype.constructor = adminFunctionStore;
 Object.setPrototypeOf(adminFunctionStore, userFunctionStore);
 
 /*** CHALLENGE 11, 12, 13 ***/
@@ -189,6 +191,31 @@ const adminFromFactory = adminFactory("Eva", 5);
 // /********* Uncomment these lines to test your work! *********/
 // adminFromFactory.sayType() // -> Logs "I am a Admin"
 // adminFromFactory.sharePublicMessage() // -> Logs "Welcome users!"
+
+/****************************************************************
+ANOTHER METHOD
+****************************************************************/
+const adminFunctionStore = {
+  // add code here
+};
+adminFunctionStore.prototype = userFactory();
+//adminFunctionStore.prototype.constructor = adminFunctionStore;
+
+/** */
+function adminFactory(name, score) {
+  // add code here
+  const admin = userFactory(name, score);
+  admin.type = "Admin";
+
+  Object.setPrototypeOf(admin, adminFunctionStore.prototype);
+
+  return admin;
+}
+/** */
+adminFunctionStore.prototype.sharePublicMessage = function () {
+  console.log(`'Welcome users!' (admin)`);
+};
+/****************************************************************/
 
 /****************************************************************
 EXTENSION: MIXINS

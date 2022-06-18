@@ -189,9 +189,23 @@ var multiMap = (arrVals, arrCallbacks) => {
   }, {});
 };
 
+const multiMap = (arrVals, arrCallbacks) => {
+  const obj = {};
+
+  for (const val of arrVals) {
+    /* obj[val] = arrCallbacks.reduce(
+      (accum, callback) => [...accum, callback(val)],
+      []
+    ); */
+    obj[val] = arrCallbacks.map((callback) => callback(val), []);
+  }
+
+  return obj;
+};
+
 var multiMap = (arrVals, arrCallbacks) => {
   const obj = {};
-  arrVals.forEach((val, idx) => {
+  arrVals.forEach((val) => {
     obj[val] = arrCallbacks.map((callback) => callback(val));
   });
   return obj;
@@ -260,6 +274,9 @@ const half = (n) => n / 2;
 // console.log(objFilter(startingObj, half)); // should log: { 2: 1, 6: 3 }
 
 // Challenge 13
+const rating2 = (arrOfFuncs, value) =>
+  (arrOfFuncs.filter((func) => func(value)).length / arrOfFuncs.length) * 100;
+
 const rating = (arrOfFuncs, value) => {
   const len = arrOfFuncs.length;
   let trueCount = 0;
@@ -283,9 +300,8 @@ const checks = [isEven, greaterThanFour, isSquare, hasSix];
 // console.log(rating(checks, 25));	// 50
 
 // Challenge 14
-const pipe = (arrOfFuncs, value) => {
-  return arrOfFuncs.reduce((acc, callback) => callback(acc), value);
-};
+const pipe = (arrOfFuncs, value) =>
+  arrOfFuncs.reduce((acc, func) => func(acc), value);
 
 // /*** Uncomment these to check your work! ***/
 const capitalize = (str) => str.toUpperCase();
@@ -307,6 +323,22 @@ const highestFunc = (objOfFuncs, subject) => {
   }
 
   return highestKey;
+};
+
+const highestFunc2 = (objOfFuncs, subject) => {
+  let largest = 0;
+  let largestKey = null;
+
+  for (var key in objOfFuncs) {
+    const executed = objOfFuncs[key](subject);
+
+    if (executed > largest) {
+      largest = executed;
+      largestKey = key;
+    }
+  }
+
+  return largestKey;
 };
 
 // /*** Uncomment these to check your work! ***/
@@ -601,6 +633,9 @@ console.log(i_ALSO_like_to_live_dangerously()); // should log: 'you are done!
 // ##########################
 
 // Challenge 1
+const functionValidator2 = (funcArr, input, output) =>
+  funcArr.filter((func) => func(input) === output);
+
 const functionValidator = (funcArr, input, output) => {
   return funcArr.reduce((acc, callback) => {
     if (callback(input) === output) acc.push(callback);
@@ -617,7 +652,7 @@ const fnArr = [addFive, multiplyByTwo, subtractOne];
 // console.log(functionValidator(fnArr, 5, 10)) // should log [num => num + 5, num => num * 2]
 
 // Challenge 2
-var allClear = (funcArr, value) => funcArr.every((cb) => cb(value));
+var allClear = (funcArr, value) => funcArr.every((func) => func(value));
 
 var allClear = (funcArr, value) => {
   return reduce((acc, callback) => {
@@ -643,14 +678,17 @@ const numFnArr = [isOdd, isPositive, multipleOfFive];
 
 // Challenge 3
 const numSelectString = (numArr) => {
-  let output = numArr.filter((num) => num % 2 === 1);
+  const f = numArr.filter((num) => num % 2);
+  const s = f.sort((a, b) => a - b);
+  const r = s.slice(1).reduce((acc, num) => `${acc}, ${num}`, s[0]);
+  return r;
+};
 
-  output.sort((a, b) => a - b);
-
-  return output.reduce((acc, num) => {
-    if (!acc.length) return `${num}`;
-    else return `${acc}, ${num}`;
-  }, "");
+const numSelectString2 = (numArr) => {
+  return numArr
+    .filter((num) => num % 2)
+    .sort((a, b) => a - b)
+    .join(", ");
 };
 
 // var nums2 = [17, 34, 3, 12]
@@ -660,6 +698,12 @@ const numSelectString = (numArr) => {
 // console.log(numSelectString(nums2))
 
 // Challenge 4
+const movieSelector2 = (moviesArr) =>
+  moviesArr
+    .filter((movie) => movie.score > 5)
+    .reduce((acc, movie) => [...acc, movie.title], [])
+    .map((movie) => movie.toUpperCase());
+
 var movieSelector = (moviesArr) => {
   let movies = moviesArr.filter((movie) => movie.score > 5);
 
@@ -698,6 +742,8 @@ const movies = [
 // console.log(movieSelector(movies)) // should log [ "PAN'S LABYRINTH", "HACKERS" ]
 
 // Challenge 5
+const curriedAddThreeNums2 = (num1) => (num2) => (num3) => num1 + num2 + num3;
+
 var curriedAddThreeNums = (num1) => {
   return (num2) => {
     return (num3) => {
