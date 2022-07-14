@@ -243,3 +243,17 @@ async function f(noun) {
 }
 
 f("dog");
+
+//
+function waitForVerb(noun) {
+  const verb = "jumps";
+  return `${noun} ${verb}`;
+}
+
+async function f(noun) {
+  const sentence = await waitForVerb(noun);
+
+  setTimeout(() => {
+    console.log(sentence);
+  }, 3000);
+}

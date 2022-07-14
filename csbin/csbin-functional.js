@@ -30,6 +30,11 @@ const map = (array, callback) => {
 
 // console.log(map([1, 2, 3], addTwo)); // [3, 4, 5]
 
+const multiplyByTwos = (x) => x * 2;
+console.log(map([1, 2, 3, 4, 5], multiplyByTwos)); //-> [2,4,6,8,10]
+console.log(multiplyByTwos(1)); //-> 2
+console.log(multiplyByTwos(2)); //-> 4
+
 // Challenge 4
 let alphabet = "";
 const letters = ["a", "b", "c", "d"];
