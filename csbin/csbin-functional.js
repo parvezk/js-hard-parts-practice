@@ -36,29 +36,65 @@ console.log(multiplyByTwos(1)); //-> 2
 console.log(multiplyByTwos(2)); //-> 4
 
 // Challenge 4
-let alphabet = "";
-const letters = ["a", "b", "c", "d"];
 
 const forEach = (array, callback) => {
   for (let i = 0; i < array.length; i++) {
     callback(array[i]);
   }
 };
+// let alphabet = "";
+// const letters = ["a", "b", "c", "d"];
 // forEach(letters, char => alphabet += char);
 // console.log(alphabet);
 
 // See for yourself if your forEach works!
 
 // Challenge 5
-var mapWith = (array, callback) => {
-  const mappedArr = [];
-  forEach(array, (x) => mappedArr.push(callback(x)));
-  return mappedArr;
+const mapWith = (array, callback) => {
+  const arr = [];
+  forEach(array, (arg) => {
+    arr.push(callback(arg));
+  });
+  return arr;
 };
-
-// console.log(mapWith([5,6,7,8], x => Math.trunc(x / 2))) // [2,3,3,4]
+const divBy2 = (x) => Math.trunc(x / 2);
+console.log(mapWith([5, 6, 7, 8], divBy2)); // [2,3,3,4]
+const multiplyBy2 = (num) => num * 2;
+console.log(mapWith([5, 6, 7, 8], multiplyBy2)); // [10, 12, 14, 16]
 
 // Challenge 6
+const reduce2 = (array, callback, initialValue) =>
+  array.reduce((acc, val) => callback(acc, val), initialValue);
+
+const reducer3 = (array, callback, initialValue) => {
+  let accumulator;
+  if (initialValue === null) accumulator = array[0];
+  else accumulator = initialValue;
+
+  if (!array.length) return accumulator;
+
+  for (let i = 0; i < array.length; i++) {
+    accumulator = callback(accumulator, array[i]);
+  }
+
+  return accumulator;
+};
+
+var nums = [4, 1, 3];
+var add = (a, b) => a + b;
+console.log(reducer(nums, add, 0)); //-> 8
+
+var nums2 = [1, 2, 3, 4, 5, 6];
+const mulAll = (acc, num) => (acc < 1 ? num : acc * num);
+console.log(reducer(nums2, mulAll, 0)); //720
+
+nums2 = [1, 2, 3, 4];
+console.log(reducer(nums2, mulAll, 5)); //120
+
+const adds = (a, b) => a + b;
+var chars = ["a", "b", "c", "d"];
+console.log(reduce(chars, adds, "")); //-> abcd
+
 const reduce = (array, callback, initialValue) => {
   let acc,
     idx = 0;
