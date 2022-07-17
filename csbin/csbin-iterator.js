@@ -38,11 +38,25 @@ function nextIterator(arr) {
   const iterator = {
     idx: 0,
     next() {
-      if (this.idx < arr.length) return arr[this.idx++];
+      if (this.idx < arr.length) {
+        return arr[this.idx++];
+      }
     },
   };
 
   return iterator;
+}
+
+function nextIterator2(arr) {
+  return {
+    idx: 0,
+    arr,
+    next() {
+      if (this.idx < this.arr.length) {
+        return this.arr[this.idx++];
+      }
+    },
+  };
 }
 
 // Uncomment the lines below to test your work
@@ -75,9 +89,28 @@ const nextIterator2 = function (arr) {
 function sumArray(arr) {
   // YOUR CODE HERE
   // use your nextIterator function
+  const iterator = nextIterator(arr);
+  let done = false;
   let sum = 0;
-  const iterables = nextIterator2(arr);
-  let iter = iterables.next();
+
+  while (!done) {
+    const val = iterator.next();
+    if (!val) {
+      done = true;
+    } else {
+      sum += val;
+    }
+  }
+
+  return sum;
+}
+
+function sumArray(arr) {
+  // YOUR CODE HERE
+  // use your nextIterator function
+  let sum = 0;
+  const iterator = nextIterator2(arr);
+  let iter = iterator.next();
 
   while (!iter.done) {
     sum += iter.value;
@@ -94,16 +127,14 @@ function sumArray(arr) {
 // CHALLENGE 4
 
 function setIterator(set) {
-  // YOUR CODE HERE
-  const values = set.values();
+  return {
+    iterator: set.values(),
 
-  const iterator = {
     next() {
-      const nextVal = values.next();
-      return nextVal["value"];
+      const it = this.iterator.next();
+      if (!it.done) return it.value;
     },
   };
-  return iterator;
 }
 
 // Uncomment the lines below to test your work
@@ -114,7 +145,17 @@ const iterateSet = setIterator(mySet);
 // console.log(iterateSet.next()); // -> should log 'y'
 
 // CHALLENGE 5
-
+function indexIterator(arr) {
+  // YOUR CODE HERE
+  return {
+    idx: 0,
+    next() {
+      if (this.idx < arr.length) {
+        return [this.idx, arr[this.idx++]];
+      }
+    },
+  };
+}
 function indexIterator(arr) {
   // YOUR CODE HERE
   let idx = 0;
@@ -139,6 +180,17 @@ function indexIterator(arr) {
 // console.log(iteratorWithIndex.next()); // -> should log [2, 'c']
 
 // CHALLENGE 6
+function Words(string) {
+  this.words = string.match(/\w+/gi);
+  this.iterator = this.words[Symbol.iterator]();
+}
+
+Words.prototype[Symbol.iterator] = function () {
+  return this.iterator;
+};
+// Uncomment the lines below to test your work
+// const helloWorld = new Words('Hello World');
+// for (let word of helloWorld) { console.log(word); } // -> should log 'Hello' and 'World'
 
 function Words(string) {
   this.str = string;
@@ -151,9 +203,9 @@ Words.prototype[Symbol.iterator] = function () {
   return {
     next: function () {
       if (index < splitStr.length) {
-        const value = splitStr[index];
-        index++;
-        return { value: value, done: false };
+        const value = splitStr[index++];
+
+        return { value, done: false };
       } else {
         return { done: true };
       }
@@ -165,31 +217,36 @@ function Words(string) {
   this.str = string;
   this.words = this.str.match(/\w+/gi);
   this.index = 0;
-  this.current = this.index;
 }
 
-Words.prototype[Symbol.iterator] = function () {
-  // YOUR CODE HERE
-
-  return this;
-};
-
 Words.prototype.next = function () {
-  if (this.current < this.words.length) {
+  if (this.index < this.words.length) {
     return {
       done: false,
-      value: this.words[this.current++],
+      value: this.words[this.index++],
     };
   } else {
     return { done: true };
   }
 };
 
-// Uncomment the lines below to test your work
-// const helloWorld = new Words('Hello World');
-// for (let word of helloWorld) { console.log(word); } // -> should log 'Hello' and 'World'
+Words.prototype[Symbol.iterator] = function () {
+  return this;
+};
 
 // CHALLENGE 7
+function valueAndPrevIndex(array) {
+  return {
+    prev: 0,
+    index: 0,
+    sentence() {
+      this.prev = this.index;
+      if (this.index === 0) return `${array[this.index++]} is the first`;
+      else return `${array[this.index++]} was found after index ${this.prev}`;
+    },
+  };
+}
+////////////
 
 function valueAndPrevIndex(array) {
   this.idx = 0;
@@ -208,7 +265,7 @@ valueAndPrevIndex.prototype.next = function () {
 valueAndPrevIndex.prototype.sentence = function () {
   const id = this.next();
 
-  if (id === 0) return `${id} is the first`;
+  if (id === 0) return `${this.arr[id]} is the first`;
   else if (id < this.len) return `${id + 1} was found after index ${id}`;
 };
 
@@ -257,3 +314,5 @@ async function f(noun) {
     console.log(sentence);
   }, 3000);
 }
+
+f("dog");

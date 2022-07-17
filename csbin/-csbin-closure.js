@@ -225,6 +225,25 @@ const stampedMultBy2 = dateStamp((n) => n * 2);
 function censor() {
   const obj = {};
 
+  return (string1, string2) => {
+    if (string1 && string2) {
+      obj[string1] = string2;
+    } else if (string1) {
+      for (const key in obj) {
+        if (string1.includes(key)) {
+          string1 = string1.replaceAll(`${key}`, obj[key]);
+          // string1 = `${string1.substring(0, string1.indexOf(key))}${obj[key]}${string1.substring(string1.indexOf(key) + key.length)}`;
+        }
+      }
+
+      return string1;
+    }
+  };
+}
+
+function censor() {
+  const obj = {};
+
   return (str1, str2) => {
     if (str1 && str2) obj[str1] = str2;
 
@@ -250,27 +269,45 @@ changeScene("quick", "slow");
 // console.log(changeScene('The quick, brown fox jumps over the lazy dogs.')); // => should log 'The slow, brown fox jumps over the lazy cats.'
 
 // CHALLENGE 13
-function createSecretHolder(secret) {
-  const user = {
-    secret: secret,
-
+function createSecretHolder(value) {
+  return {
+    secret: value,
     getSecret() {
       return this.secret;
     },
-
     setSecret(val) {
       this.secret = val;
     },
   };
+}
 
-  return user;
+function createSecretHolder(secretVal) {
+  return {
+    value: secretVal,
+
+    get secret() {
+      return this.value;
+    },
+
+    set secret(val) {
+      this.value = val;
+    },
+
+    getSecret() {
+      return this.value;
+    },
+
+    setSecret(val) {
+      this.value = val;
+    },
+  };
 }
 
 // /*** Uncomment these to check your work! ***/
 // console.log(createSecretHolder(5))
 var obj = createSecretHolder(5);
 // console.log(obj.getSecret()) // => returns 5
-obj.setSecret(2);
+// obj.setSecret(2);
 // console.log(obj.getSecret()) // => returns 2
 
 // CHALLENGE 14

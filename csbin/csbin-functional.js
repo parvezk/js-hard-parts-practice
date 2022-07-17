@@ -122,6 +122,14 @@ var intersection = (...arrays) => {
   }, arrays[0]);
 };
 
+const intersection2 = (...arrays) =>
+  arrays
+    .slice(1)
+    .reduce(
+      (accum, array) => array.filter((num) => accum.includes(num)),
+      arrays[0]
+    );
+
 const intersection = (...arrays) => {
   return arrays.slice(1).reduce((accum, array) => {
     return accum.filter(
@@ -138,6 +146,24 @@ var intersection = (...arrays) => {
     });
     return accum;
   }, arrays[0]);
+};
+
+const intersection3 = (...arrays) => {
+  let acc = arrays.length ? arrays.shift() : [];
+
+  while (arrays.length) {
+    const newAcc = [];
+    const arr = arrays.shift();
+
+    for (const num of arr) {
+      if (acc.includes(num)) {
+        newAcc.push(num);
+      }
+    }
+    acc = newAcc.slice();
+  }
+
+  return acc;
 };
 
 var intersection = (...arrays) => {
@@ -170,7 +196,7 @@ const union2 = (...arrays) =>
     .reduce(
       (accum, array) =>
         array.reduce(
-          (acc, num) => (!acc.includes(num) ? [...acc, num] : acc),
+          (acc, num) => (acc.includes(num) ? acc : [...acc, num]),
           accum
         ),
       arrays[0]
@@ -230,6 +256,27 @@ var multiMap = (arrVals, arrCallbacks) => {
   }, {});
 };
 
+const multiMap = (arrVals, arrCallbacks) =>
+  arrVals.reduce(
+    (accum, val) => ({
+      ...accum,
+      [val]: arrCallbacks.reduce(
+        (acc, callback) => [...acc, callback(val)],
+        []
+      ),
+    }),
+    {}
+  );
+
+const multiMap = (arrVals, arrCallbacks) =>
+  arrVals.reduce(
+    (accum, val) => ({
+      ...accum,
+      [val]: arrCallbacks.map((callback) => callback(val)),
+    }),
+    {}
+  );
+
 const multiMap = (arrVals, arrCallbacks) => {
   const obj = {};
 
@@ -284,6 +331,11 @@ const subtract5 = (n) => n - 5;
 // console.log(commutative(divBy4, subtract5, 48)); // should log: false
 
 // Challenge 12
+const objFilter2 = (obj, callback) =>
+  Object.fromEntries(
+    Object.entries(obj).filter(([key, val]) => callback(key) === val)
+  );
+
 var objFilter = (obj, callback) => {
   const object = {};
 
@@ -718,6 +770,13 @@ const numFnArr = [isOdd, isPositive, multipleOfFive];
 // console.log(allClear(numFnArr, 100)) // should log false
 
 // Challenge 3
+const numSelectString3 = (numArr) => {
+  return numArr
+    .filter((num) => num % 2)
+    .sort((a, b) => a - b)
+    .reduce((acc, n) => (acc.length === 0 ? `${n}` : `${acc}, ${n}`), "");
+};
+
 const numSelectString = (numArr) => {
   const f = numArr.filter((num) => num % 2);
   const s = f.sort((a, b) => a - b);
@@ -797,7 +856,10 @@ var curriedAddThreeNums = (num1) => {
 // console.log(curriedAddThreeNums(1)(3)(7)) //should return 11
 
 // Challenge 6
-const curriedAddTwoNumsToFive = (num) => {
+const curriedAddTwoNumsToFive = (num1) => (num2) =>
+  curriedAddThreeNums(num1)(num2)(5);
+
+const curriedAddTwoNumsToFive2 = (num) => {
   return curriedAddThreeNums(5)(num);
 };
 

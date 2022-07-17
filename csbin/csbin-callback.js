@@ -60,17 +60,27 @@ function multiMap(arrVals, arrCallbacks) {}
 // should log: { catfood: ['CATFOOD', 'Catfood', 'catfoodcatfood'], glue: ['GLUE', 'Glue', 'glueglue'], beer: ['BEER', 'Beer', 'beerbeer'] }
 
 // Challenge 11
-function objectFilter(obj, callback) {
+const objectFilter = (obj, callback) => {
+  for (const [key, val] of Object.entries(obj)) {
+    if (val !== callback(key)) {
+      delete obj[key];
+    }
+  }
+
+  return obj;
+};
+
+const objectFilter2 = (obj, callback) => {
   const object = {};
 
-  for (const [key, val] of Object.entries(obj)) {
-    if (callback(key) === val) {
-      object[key] = val;
+  for (const key in obj) {
+    if (obj[key] === callback(key)) {
+      object[key] = obj[key];
     }
   }
 
   return object;
-}
+};
 
 const cities = {
   London: "LONDON",
@@ -78,6 +88,15 @@ const cities = {
   Paris: "PARIS",
 };
 // console.log(objectFilter(cities, city => city.toUpperCase())) // Should log { London: 'LONDON', Paris: 'PARIS'}
+const cities2 = {
+  London: "LONDON",
+  LA: "Los Angeles",
+  SF: "San Francisco",
+  Chicago: "CHICAGO",
+  Paris: "PARIS",
+  Austin: "AUSTIN",
+};
+// console.log(objectFilter2(cities2, city => city.toUpperCase()))
 
 // Challenge 12
 function majority(array, callback) {
@@ -90,6 +109,20 @@ function majority(array, callback) {
   return totalTrues > array.length / 2;
 }
 
+function majority(array, callback) {
+  let T = 0,
+    F = 0,
+    mid = Math.trunc(array.length / 2);
+
+  for (let i = 0; i < array.length; i++) {
+    if (callback(array[i])) T++;
+    else F++;
+    if (T > mid) return T !== F;
+  }
+
+  return T > mid ? true : false;
+}
+
 // /*** Uncomment these to check your work! ***/
 const isOdd = function (num) {
   return num % 2 === 1;
@@ -98,19 +131,35 @@ const isOdd = function (num) {
 // console.log(majority([2, 3, 4, 5], isOdd)); // should log: false
 
 // Challenge 13
+
 function prioritize(array, callback) {
-  const priorities = [];
+  const priorties = [];
   let i = 0,
     len = array.length;
 
   while (i++ < len) {
-    let item = array.shift();
+    const item = array.shift();
 
-    if (callback(item)) priorities.push(item);
-    else array.push(item);
+    if (callback(item)) {
+      priorties.push(item);
+    } else {
+      array.push(item);
+    }
   }
 
-  return [].concat(priorities, array);
+  return [].concat(priorties).concat(array);
+}
+
+function prioritize(array, callback) {
+  const p = [],
+    np = [];
+
+  for (let i = 0; i < array.length; i++) {
+    if (callback(array[i])) p.push(array[i]);
+    else np.push(array[i]);
+  }
+
+  return [].concat(p).concat(np);
 }
 
 // /*** Uncomment these to check your work! ***/
@@ -125,8 +174,11 @@ function countBy(array, callback) {
   for (const item of array) {
     const key = callback(item);
 
-    if (key in object) object[key]++;
-    else object[key] = 1;
+    if (key in object) {
+      object[key]++;
+    } else {
+      object[key] = 1;
+    }
   }
 
   return object;
@@ -142,13 +194,15 @@ function countBy(array, callback) {
 function groupBy(array, callback) {
   const object = {};
 
-  for (const value of array) {
-    const key = callback(value);
+  for (const item of array) {
+    const key = callback(item);
 
-    if (key in object) object[key].push(value);
-    else object[key] = [value];
+    if (key in object) {
+      object[key].push(item);
+    } else {
+      object[key] = [item];
+    }
   }
-
   return object;
 }
 
@@ -161,11 +215,10 @@ const floored = function (num) {
 
 // Challenge 16
 function goodKeys(obj, callback) {
-  const object = {},
-    output = [];
+  const output = [];
 
-  for (const [key, val] of Object.entries(obj)) {
-    if (callback(val)) output.push(key);
+  for (var key in obj) {
+    if (callback(obj[key])) output.push(key);
   }
 
   return output;
@@ -186,7 +239,7 @@ const startsWithBird = function (str) {
 
 // Challenge 17
 function commutative(func1, func2, value) {
-  return func1(func2(value)) === func2(func1(value));
+  return func2(func1(value)) === func1(func2(value));
 }
 
 // /*** Uncomment these to check your work! ***/
@@ -202,10 +255,21 @@ function objFilter(obj, callback) {
   const object = {};
 
   for (const [key, val] of Object.entries(obj)) {
-    if (callback(key) === val) object[key] = val;
+    if (callback(key) === val) {
+      object[key] = val;
+    }
   }
 
   return object;
+}
+
+function objFilter(obj, callback) {
+  for (const [key, val] of Object.entries(obj)) {
+    if (callback(key) !== val) {
+      delete obj[key];
+    }
+  }
+  return obj;
 }
 
 // /*** Uncomment these to check your work! ***/
@@ -218,13 +282,14 @@ function objFilter(obj, callback) {
 
 // Challenge 19
 function rating(arrOfFuncs, value) {
+  const len = arrOfFuncs.length;
+
   let trueCount = 0;
 
   for (const callback of arrOfFuncs) {
     if (callback(value)) trueCount++;
   }
-
-  return (trueCount / arrOfFuncs.length) * 100;
+  return (trueCount / len) * 100;
 }
 
 // /*** Uncomment these to check your work! ***/

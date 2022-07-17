@@ -190,8 +190,40 @@ const obj = {
 };
 const arr = ["first", "second", "third"];
 // console.log(pathFinder(obj, arr));   //-> "finish"
+const obj2 = {
+  first: {
+    second: { wrong: "###" },
+    second: { third: { fourth: "fourth-finish" } },
+  },
+  second: { third: "wrong" },
+};
+const arr2 = ["first", "second", "third", "fourth"];
+console.log(pathFinder(obj2, arr2)); //-> "fourth-finish"
+
+const obj3 = {
+  first: { second: { third: "finish" } },
+  second: { third: "wrong" },
+};
+const arr3 = ["first", "second", "third", "fourth"];
+console.log(pathFinder(obj3, arr3)); //-> "finish"
 
 //Challenge 6
+function flattenRecursively2(arr, output = []) {
+  for (const item of arr) {
+    if (Array.isArray(item)) {
+      output = [...output, ...flattenRecursively(item, [])];
+    } else {
+      output.push(item);
+    }
+  }
+  return output;
+}
+// console.log(flattenRecursively([1, [2, 3, [4]]])); //-> [1, 2, 3, 4]
+// // console.log(flattenRecursively([1, {}, [3, [[4]]]])); //-> [1, {}, 3, 4]
+// console.log(flattenRecursively([1, [2,[[55, [66, [[]], [77]]]], 3, [4]]])); //-> [1, 2, 55, 66, 77, 3, 4]
+// console.log(flattenRecursively([1, {}, [3, [[4]], [[[]], 66]], 777])); //-> [1, { }, 3, 4, 66, 777]
+
+////////////FLAWED
 function flattenRecursively(arr, output = []) {
   if (Array.isArray(arr)) {
     for (const item of arr) {
@@ -204,7 +236,7 @@ function flattenRecursively(arr, output = []) {
   }
   return output;
 }
-
+////////////FLAWED
 function flattenRecursively(arr) {
   const helper = (array, result = []) => {
     for (const val of array) {
@@ -220,15 +252,12 @@ function flattenRecursively(arr) {
   return helper(arr);
 }
 
-// console.log(flattenRecursively([1, [2, 3, [4]]])); //-> [1, 2, 3, 4]
-// console.log(flattenRecursively([1, {}, [3, [[4]]]])); //-> [1, {}, 3, 4]
-
 //Challenge 7
 function findInOrderedSet(arr, target) {
   const helper = (left, right) => {
     if (left > right) return false;
 
-    while (left < right) {
+    while (left <= right) {
       const mid = left + Math.trunc((right - left) / 2);
 
       if (arr[mid] === target) return true;
@@ -242,26 +271,27 @@ function findInOrderedSet(arr, target) {
   return helper(0, arr.length - 1);
 }
 
-function findInOrderedSet(arr, target) {
-  const helper = (start, end) => {
-    if (start > end) return false;
+const findInOrderedSet = (arr, target, i = 0, j = arr.length - 1) => {
+  if (i > j) return false;
+  if (i === j) return arr[i] == target;
 
-    const mid = start + Math.trunc((end - start) / 2);
+  const mid = i + Math.trunc((j - i) / 2);
 
-    if (arr[mid] == target) return true;
+  if (arr[mid] === target) return true;
 
-    if (arr[mid] < target) return helper(start + 1, end);
-    else return helper(start, mid - 1);
-  };
-
-  return helper(0, arr.length - 1);
-}
+  if (arr[mid] < target) {
+    return findInOrderedSet(arr, target, mid + 1, j);
+  } else {
+    return findInOrderedSet(arr, target, i, mid - 1);
+  }
+};
 
 const nums = [1, 4, 6, 7, 9, 17, 45];
-console.log(4, findInOrderedSet(nums, 4)); //-> true
-console.log(2, findInOrderedSet(nums, 2)); //-> false
-console.log(17, findInOrderedSet(nums, 17)); //-> true
-console.log(46, findInOrderedSet(nums, 46)); //-> false
+// console.log(findInOrderedSet(nums, 4));  //-> true
+// console.log(findInOrderedSet(nums, 2));  //-> false
+// console.log(findInOrderedSet(nums, 7)); //-> true
+// console.log(findInOrderedSet(nums, 45));  //-> true
+// console.log(findInOrderedSet(nums, 77));  //-> false
 
 //Challenge 8
 function countWaysToReachNthStair(n) {
