@@ -174,8 +174,8 @@ Object.setPrototypeOf(adminFunctionStore, userFunctionStore);
 function adminFactory(name, score) {
   // add code here
   const admin = userFactory(name, score);
-  Object.setPrototypeOf(admin, adminFunctionStore);
   admin.type = "Admin";
+  Object.setPrototypeOf(admin, adminFunctionStore);
 
   return admin;
 }
@@ -193,7 +193,7 @@ const adminFromFactory = adminFactory("Eva", 5);
 // adminFromFactory.sharePublicMessage() // -> Logs "Welcome users!"
 
 /****************************************************************
-ANOTHER METHOD
+ANOTHER METHOD 2
 ****************************************************************/
 const adminFunctionStore = {
   // add code here
@@ -215,7 +215,47 @@ function adminFactory(name, score) {
 adminFunctionStore.prototype.sharePublicMessage = function () {
   console.log(`'Welcome users!' (admin)`);
 };
-/****************************************************************/
+/****************************************************************
+ANOTHER METHOD 3
+****************************************************************/
+
+const userFunctionStore = {
+  sayType: function () {
+    console.log("I am a " + this.type);
+  },
+};
+
+function userFactory(name, score) {
+  let user = Object.create(userFunctionStore);
+  user.type = "User";
+  user.name = name;
+  user.score = score;
+  return user;
+}
+
+/*** CHALLENGE 10 ***/
+
+const adminFunctionStore = {
+  // add code here
+};
+Object.setPrototypeOf(adminFunctionStore, userFunctionStore);
+
+/*** CHALLENGE 11, 12, 13 ***/
+
+function adminFactory(name, score) {
+  // add code here
+  const admin = Object.create(adminFunctionStore);
+  admin.type = "Admin";
+  admin.name = name;
+  admin.score = score;
+  return admin;
+}
+
+/*** CHALLENGE 14 ***/
+/* Put code here for a method called sharePublicMessage*/
+adminFunctionStore.sharePublicMessage = function () {
+  console.log("Welcome users!");
+};
 
 /****************************************************************
 EXTENSION: MIXINS
