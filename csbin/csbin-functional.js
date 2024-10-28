@@ -96,19 +96,18 @@ var chars = ["a", "b", "c", "d"];
 console.log(reduce(chars, adds, "")); //-> abcd
 
 const reduce = (array, callback, initialValue) => {
-  let acc,
-    idx = 0;
+  let acc, idx = 0;
   if (initialValue) acc = initialValue;
-  else {
-    acc = array[idx++];
-  }
+  else acc = array[idx++];
+  
   if (idx >= array.length || !array.length) return acc;
 
-  for (let i = idx; i < array.length; i++) {
+  for (let i = idx; i < array.length; i++) 
     acc = callback(acc, array[i]);
-  }
+  
   return acc;
 };
+
 const nums = [4, 1, 3];
 const add = (a, b) => a + b;
 // console.log(reduce(nums, add, 0));   //-> 8
