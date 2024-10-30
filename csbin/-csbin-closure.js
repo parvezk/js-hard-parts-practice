@@ -118,20 +118,14 @@ function delay(func, wait, ...args) {
     }, wait);
   };
 }
-//
+
 const ob = { count: 0 };
 const fn = (o) => ++o.count;
-const delayedFn = delay(fn, 1000, 0);
+const delayedFn = delay(fn, 1000, ob);
 delayedFn();
 console.log(ob.count); // should print '0'
 setTimeout(() => console.log(ob.count), 1000); // should print '1' after 1 second
 //
-// NOT WORKING
-let count = 0;
-const delayedFunc = delay(() => count++, 1000);
-delayedFunc();
-// console.log(count); 												 // should print '0'
-// setTimeout(() => console.log(count), 1000); // should print '1' after 1 second
 
 // CHALLENGE 7
 function rollCall(names) {
