@@ -65,20 +65,27 @@ const sandra = personFromPersonStore("Sandra", 26);
 // const personPrototype = Object.getPrototypeOf(personStore)
 
 // personPrototype.introduce = function () {
-//   console.log(`'Hi, my name is ${this.name}'`)
+//   console.log(`'Hi, my name is ${this.name}'`);
 // }
 
 // option 2
 // Object.setPrototypeOf(personStore, {
 //   introduce () {
-//     console.log(`'Hi, my name is ${this.name}'`)
+//     console.log(`'Hi, my name is ${this.name}'`);
 //   }
 // });
 
 // option 3
-personStore.introduce = function () {
-  console.log(`Hi, my name is ${this.name}`);
-};
+// personStore.introduce = function () {
+//   console.log(`'Hi, my name is ${this.name}'`);
+// }
+
+// option 4
+Object.defineProperty(personStore, "introduce", {
+  value: function () {
+    console.log(`'Hi, my name is ${this.name}'`);
+  },
+});
 
 // sandra.introduce(); // -> Logs 'Hi, my name is Sandra'
 
