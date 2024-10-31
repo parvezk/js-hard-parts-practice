@@ -36,14 +36,22 @@ const personStore = {
 
 /*** CHALLENGE 3 ***/
 
+// function personFromPersonStore(name, age) {
+//   // add code here
+//   const person = Object.create(personStore);
+//   person.name = name;
+//   person.age = age;
+//   return person;
+// }
+
 function personFromPersonStore(name, age) {
   // add code here
-  const person = Object.create(personStore);
-  person.name = name;
-  person.age = age;
+  let person = Object.create(personStore);
+  person = Object.assign(person, { name, age });
   return person;
 }
 
+// const sandra = new personFromPersonStore("Sandra", 26);
 const sandra = personFromPersonStore("Sandra", 26);
 
 // /********* Uncomment these lines to test your work! *********/
@@ -53,7 +61,21 @@ const sandra = personFromPersonStore("Sandra", 26);
 
 /*** CHALLENGE 4 ***/
 
-// add code here
+// option 1
+// const personPrototype = Object.getPrototypeOf(personStore)
+
+// personPrototype.introduce = function () {
+//   console.log(`'Hi, my name is ${this.name}'`)
+// }
+
+// option 2
+// Object.setPrototypeOf(personStore, {
+//   introduce () {
+//     console.log(`'Hi, my name is ${this.name}'`)
+//   }
+// });
+
+// option 3
 personStore.introduce = function () {
   console.log(`Hi, my name is ${this.name}`);
 };
