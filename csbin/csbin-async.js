@@ -180,28 +180,25 @@ function debounce(callback, interval) {
 }
 
 function debounce(callback, interval) {
-  // ADD CODE HERE
-  let readyToCall = true;
-  let timer;
+  let timeoutId = null,
+    readyToCall = true;
 
-  return function () {
+  return function (v) {
     if (readyToCall) {
       readyToCall = false;
 
-      timer = setTimeout(() => {
+      timeoutId = setTimeout(() => {
         readyToCall = true;
       }, interval);
 
       return callback();
-    } else {
-      clearTimeout(timer);
-
-      timer = setTimeout(() => {
-        readyToCall = true;
-      }, interval);
-
-      return undefined;
     }
+
+    clearTimeout(timeoutId);
+
+    timeoutId = setTimeout(() => {
+      readyToCall = true;
+    }, interval);
   };
 }
 
